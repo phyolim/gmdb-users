@@ -28,4 +28,9 @@ public class UserService {
                 .findByEmailAndPassword(user.getEmail(), user.getPassword())
                 .orElseThrow(UserNotFoundException::new);
     }
+
+    public int logOut(User user) {
+        final int responseCode = 200;
+        return responseCode;
+    }
 }

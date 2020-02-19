@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import javax.transaction.Transactional;
 
@@ -36,22 +37,42 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateDuplicateUser(){
+    void testCreateDuplicateUser() {
         userService.register(user);
-        assertThrows(ConflictException.class, ()-> userService.register(user));
+        assertThrows(ConflictException.class, () -> userService.register(user));
     }
 
+    //  GIVEN I am a user
+    //  WHEN I send a POST request to the URI to login
+    //  THEN I receive a successful status code when I attempt to login
     @Test
-    void testValidUserLogin(){
+    void testValidUserLogin() {
         userService.register(user);
         User returnedUser = userService.logIn(user);
         assertEquals(user, returnedUser);
     }
 
+    //  GIVEN I am not a registered user
+    //  WHEN I send a POST request to the URI to login
+    //  THEN I recieve a status code or json object indicating that I am not a registered user and therefore cannot be logged in
     @Test
-    void testInvalidUserLogin(){
-        assertThrows(UserNotFoundException.class, ()-> userService.logIn(user));
+    void testUnregisteredUserLogin() {
+        assertThrows(UserNotFoundException.class, () -> userService.logIn(user));
     }
+
+    //  GIVEN I am a user
+    //  WHEN I send a POST request to the URI to logout
+    //  THEN I recieve a successful status code when I attempt to logout
+    @Test
+    void testValidUserLogout() {
+        userService.register(user);
+        int response = userService.logOut(user);
+        assertEquals(HttpStatus.OK.value(), response);
+    }
+
+    //  GIVEN I am a user
+    //  WHEN I go to the endpoint associated with the action to "logout"
+    //  THEN I recieve a json object or status code indicating that I have successfully been logged out
 
     @AfterEach
     void tearDown() {
