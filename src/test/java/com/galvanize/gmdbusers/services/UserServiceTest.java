@@ -63,6 +63,8 @@ class UserServiceTest {
     //  GIVEN I am a user
     //  WHEN I send a POST request to the URI to logout
     //  THEN I recieve a successful status code when I attempt to logout
+
+
     @Test
     void testValidUserLogout() {
         userService.register(user);
@@ -74,7 +76,4 @@ class UserServiceTest {
     //  WHEN I go to the endpoint associated with the action to "logout"
     //  THEN I recieve a json object or status code indicating that I have successfully been logged out
 
-    @AfterEach
-    void tearDown() {
-    }
 }

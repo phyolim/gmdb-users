@@ -1,5 +1,13 @@
 package com.galvanize.gmdbusers.v1.dto;
 
-public class UserDto {
+import lombok.Data;
 
+@Data
+public class UserDto {
+    private Long id;
+    private String email;
+    private String password;
+
+    public UserDto(String email, String password) {
+    }
 }
