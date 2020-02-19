@@ -9,5 +9,7 @@ public class UserDto {
     private String password;
 
     public UserDto(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 }

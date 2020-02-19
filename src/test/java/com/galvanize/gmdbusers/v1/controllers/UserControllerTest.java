@@ -42,12 +42,24 @@ class UserControllerTest {
     //  Users can login using email
     //  Users can logout
 
+    //  register user Test
+    @Test
+    void testUserRegistration() throws Exception{
+        String url = "/v1/users/register";
+        MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"phyotalim@gmail.com\", \"password\": \"testPassword\"}");
+        mockMvc
+                .perform(request)
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     //  GIVEN I am a user
     //  WHEN I send a POST request to the URI to login
     //  THEN I receive a successful status code when I attempt to login
     @Test
     void testValidUserLogin() throws Exception{
-        String url = "/v1/users";
+        String url = "/v1/users/login";
         MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"phyotalim@gmail.com\", \"password\": \"testPassword\"}");
         mockMvc

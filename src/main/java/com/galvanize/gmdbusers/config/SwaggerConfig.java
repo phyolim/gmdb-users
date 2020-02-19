@@ -21,7 +21,7 @@ public class SwaggerConfig {
                 .groupName("users-api-1")
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(regex("/v1/users/*"))
+                .paths(regex("/v1/users/.*"))
                 .build()
                 .apiInfo(new ApiInfoBuilder().version("1").title("Users API").build());
     }

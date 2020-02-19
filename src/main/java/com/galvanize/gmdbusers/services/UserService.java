@@ -26,7 +26,7 @@ public class UserService {
     public User logIn(User user) {
         return userRepository
                 .findByEmailAndPassword(user.getEmail(), user.getPassword())
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
     }
 
     public int logOut(User user) {
