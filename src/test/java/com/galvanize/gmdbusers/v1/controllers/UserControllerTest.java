@@ -11,12 +11,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class UserControllerTest {
 
     @Autowired
@@ -40,25 +43,58 @@ class UserControllerTest {
     void testUserRegistration() throws Exception {
         String url = "/v1/users/register";
         MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\": \"phyotalim2@gmail.com\", \"password\": \"testPassword2\"}");
+                .content("{\"email\": \"phyotalim2000@gmail.com\", \"password\": \"testPassword2\"}");
         mockMvc
                 .perform(request)
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void testUserRegistrationWithMissingParam() throws Exception {
+        String url = "/v1/users/register";
+        MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"phyotalim2000@gmail.com\"}");
+        mockMvc
+                .perform(request)
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+
     //  GIVEN I am a user
     //  WHEN I send a POST request to the URI to login
     //  THEN I receive a successful status code when I attempt to login
     @Test
     void testValidUserLogin() throws Exception {
+        String registerUrl = "/v1/users/register";
+        String loginUrl = "/v1/users/login";
+        String email = "phyotest@gmail.com";
+        String password = "testPassword";
+        MockHttpServletRequestBuilder registerRequest = post(registerUrl).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}");
+        mockMvc
+                .perform(registerRequest)
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        MockHttpServletRequestBuilder loginRequest = post(loginUrl).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}");
+        mockMvc
+                .perform(loginRequest)
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testValidUserLoginWithoutPassword() throws Exception {
         String url = "/v1/users/login";
         MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\": \"phyotalim@gmail.com\", \"password\": \"testPassword\"}");
+                .content("{\"email\": \"phyotalim@gmail.com\"}");
         mockMvc
                 .perform(request)
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is4xxClientError());
     }
 
     //  GIVEN I am not a registered user
@@ -81,11 +117,22 @@ class UserControllerTest {
 
     @Test
     void testValidUserLogout() throws Exception {
-        String url = "/v1/users/logout";
-        MockHttpServletRequestBuilder request = post(url).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\": \"phyotalim@gmail.com\"}");
+        String registerUrl = "/v1/users/register";
+        String email = "phyotest@gmail.com";
+        String password = "testPassword";
+        String body = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
+        MockHttpServletRequestBuilder registerRequest = post(registerUrl).contentType(MediaType.APPLICATION_JSON)
+                .content(body);
         mockMvc
-                .perform(request)
+                .perform(registerRequest)
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String logoutUrl = "/v1/users/logout";
+        MockHttpServletRequestBuilder logoutRequest = post(logoutUrl).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"phyotest@gmail.com\"}");
+        mockMvc
+                .perform(logoutRequest)
                 .andDo(print())
                 .andExpect(status().isOk());
     }

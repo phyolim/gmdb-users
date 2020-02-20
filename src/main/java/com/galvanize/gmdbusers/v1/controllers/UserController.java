@@ -38,7 +38,7 @@ public class UserController {
     })
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@ApiParam("New User")
+    public ResponseEntity<User> register(@Valid @ApiParam("New User")
                                          @RequestBody RegisterRequest registerRequest) {
         User user = this.userService.register(mapAll(registerRequest, User.class));
         return ResponseEntity.ok(user);
@@ -53,14 +53,9 @@ public class UserController {
 
     @ApiOperation("Logout User")
     @PostMapping("/logout")
-    public ResponseEntity logoutPost(@RequestBody LogoutRequest logoutRequest) {
+    public ResponseEntity logoutPost(@Valid @RequestBody LogoutRequest logoutRequest) {
         this.userService.logout(mapAll(logoutRequest, User.class));
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation("Logout User - in development")
-    @GetMapping("/logout")
-    public void logoutGet(@RequestParam(required = false) String email) {
-        this.userService.logout(mapAll(email, User.class));
-    }
 }

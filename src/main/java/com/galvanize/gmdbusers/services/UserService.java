@@ -29,7 +29,6 @@ public class UserService {
     }
 
     public User login(User user) {
-        logger.debug(user.toString());
         return userRepository
                 .findByEmailAndPassword(user.getEmail(), user.getPassword())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
