@@ -1,11 +1,11 @@
-package com.galvanize.gmdbusers.v1.controllers;
+package com.galvanize.gmdbusers.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException(String message){
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
         super(message);
     }
 }

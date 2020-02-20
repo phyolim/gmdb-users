@@ -9,11 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
-
 @Entity
 @Data
-@Repository
-
 public class User {
     /**
      * User Entity

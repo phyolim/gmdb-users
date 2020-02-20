@@ -2,9 +2,8 @@ package com.galvanize.gmdbusers.services;
 
 import com.galvanize.gmdbusers.models.User;
 import com.galvanize.gmdbusers.repositories.UserRepository;
-import com.galvanize.gmdbusers.v1.controllers.ConflictException;
-import com.galvanize.gmdbusers.v1.controllers.UserNotFoundException;
-import org.junit.jupiter.api.AfterEach;
+import com.galvanize.gmdbusers.exceptions.ConflictException;
+import com.galvanize.gmdbusers.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("phyotalim@gmail.com", "password");
+        user = new User("phyotalim10@gmail.com", "password");
     }
 
     @Test
@@ -48,7 +47,7 @@ class UserServiceTest {
     @Test
     void testValidUserLogin() {
         userService.register(user);
-        User returnedUser = userService.logIn(user);
+        User returnedUser = userService.login(user);
         assertEquals(user, returnedUser);
     }
 
@@ -57,7 +56,7 @@ class UserServiceTest {
     //  THEN I recieve a status code or json object indicating that I am not a registered user and therefore cannot be logged in
     @Test
     void testUnregisteredUserLogin() {
-        assertThrows(UserNotFoundException.class, () -> userService.logIn(user));
+        assertThrows(UserNotFoundException.class, () -> userService.login(user));
     }
 
     //  GIVEN I am a user
@@ -68,7 +67,7 @@ class UserServiceTest {
     @Test
     void testValidUserLogout() {
         userService.register(user);
-        int response = userService.logOut(user);
+        int response = userService.logout(user);
         assertEquals(HttpStatus.OK.value(), response);
     }
 

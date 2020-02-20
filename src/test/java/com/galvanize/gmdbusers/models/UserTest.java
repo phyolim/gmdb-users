@@ -24,9 +24,7 @@ class UserTest {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
     User user;
-    @Autowired
     User userFromDb;
 
     @BeforeEach
